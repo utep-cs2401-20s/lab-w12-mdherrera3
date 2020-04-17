@@ -15,8 +15,9 @@ class myBinarySearchTreeNode{
     // creates a new Binary Search Tree rooted at the first value in the array
     // by inserting elements into the tree in the order they are given in A.
     myBinarySearchTreeNode tree = new myBinarySearchTreeNode(A[0]);
+    myValue = A[0];
     for(int i = 1; i < A.length; i++) {
-      tree.insert(A[i]);
+      this.insert(A[i]);
     }
   }
   
@@ -28,9 +29,6 @@ class myBinarySearchTreeNode{
     //    * in the left subtree,
     //    * or in the right subtree.
     // If the value already exists in the tree, no action is taken.
-    if(inValue == myValue){
-      System.out.print("Error");
-    }
     if(inValue > myValue){
       //insert to the right
       if(right == null){
@@ -40,7 +38,7 @@ class myBinarySearchTreeNode{
         right.insert(inValue);
       }
     }
-    if(inValue < myValue){ //insert to the left
+    else if(inValue < myValue){ //insert to the left
       if(left == null){
         left = new myBinarySearchTreeNode(inValue);
       }
@@ -48,14 +46,17 @@ class myBinarySearchTreeNode{
         left.insert(inValue);
       }
     }
+    else{
+      System.out.println("Error");
+    }
   }
   public int size(){
     int sum = 1;
     if(left != null){
-      sum += left.size();
+      sum = sum + left.size();
     }
     if(right != null){
-      sum += right.size();
+      sum = sum + right.size();
     }
     return sum;
   }
@@ -63,20 +64,23 @@ class myBinarySearchTreeNode{
   public int height(){
      // This method recursively calculates the height of the entire (sub)tree.
      // This method will take O(n) time
+
     int leftH = 0;
     int rightH = 0;
-    if( left != null){
-      leftH = left.height() + 1;
+    int treeHeight = 0;
+    if(left != null){
+      leftH += left.height();
     }
     if(right != null){
-      rightH = right.height() + 1;
+      rightH += right.height();
     }
-    if(leftH <= rightH){
-      return rightH + 1;
+    //compares to see which is higher in order to return the correct height
+    if(leftH > rightH){
+      treeHeight = leftH;
+    }else{
+      treeHeight = rightH;
     }
-    else{
-      return leftH + 1;
-    }
+    return treeHeight + 1;
   }
   
   public int depth(int search){
@@ -86,13 +90,22 @@ class myBinarySearchTreeNode{
      // Additionally, remember that the depth is the number of nodes on the path from a node to the root 
      // (i.e. the number of the recursive calls).
 
-    if(myValue < search){
+    //from the previous commit I noticed that I had the search and my value switched
+    if(search < myValue){
+      if(left == null){
+        return -1;
+      }
+      //go left
       return left.depth(search) + 1;
     }
-    if(myValue > search){
+    if(search > myValue){
+      if(right == null){
+        return -1;
+      }
+      //go right
       return right.depth(search) + 1;
     }
-    if(myValue == search){
+    if(search == myValue){
       return 0;
     }
     return -1;
